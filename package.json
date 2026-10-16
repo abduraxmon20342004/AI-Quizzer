@@ -1,0 +1,58 @@
+{
+  "name": "student-game-bot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.134.0",
+    "@napi-rs/canvas": "1.0.11",
+    "dotenv": "18.0.8",
+    "kysely": "0.29.6",
+    "luxon": "3.7.2",
+    "mammoth": "1.13.0",
+    "node-telegram-bot-api": "2.1.0",
+    "openai": "^7.34.0",
+    "pdfjs-dist": "6.4.299",
+    "pg": "8.23.1",
+    "pg-boss": "12.38.0",
+    "pino": "10.4.0",
+    "tesseract.js": "7.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/luxon": "3.7.6",
+    "@types/node": "26.6.5",
+    "@types/pg": "8.23.1",
+    "embedded-postgres": "17.10.0-beta.17",
+    "pino-pretty": "13.2.0",
+    "railway": "^3.16.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "@embedded-postgres/windows-x64@17.10.0-beta.17": true,
+    "tesseract.js": false
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/src/main.js",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:local": "tsx scripts/local-db.ts",
+    "migrate": "tsx src/cli/migrate.ts",
+    "seed": "tsx src/cli/seed.ts",
+    "simulate": "tsx src/cli/simulate.ts",
+    "loadtest": "tsx src/cli/loadtest.ts",
+    "eval:grading": "tsx src/cli/evalGrading.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "ocr:check": "tsx scripts/ocr-check.ts",
+    "db:check": "tsx src/cli/dbCheck.ts"
+  }
+}

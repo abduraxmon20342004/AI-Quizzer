@@ -1,0 +1,207 @@
+import type { GameType } from "../domain/gameTypes.js";
+
+export type Lang = "uz" | "ru" | "en";
+
+/** Student-facing texts: short, friendly, suitable for children. Uzbek is the default. */
+const uz = {
+  answerAccepted: "Javobingiz qabul qilindi ✅",
+  alreadyAnswered: "Siz bu savolga allaqachon javob bergansiz.",
+  tooLate: "Vaqt tugadi ⌛ Javob qabul qilinmadi.",
+  notEligible: "Hozircha bu o'yinda qatnasha olmaysiz.",
+  buttonExpired: "Bu tugma endi ishlamaydi.",
+  stageAlreadyAnswered: "Bu bosqichda javob berdingiz. Keyingi maslahatni kuting.",
+  privateReady: "Tayyor ✅ Javob talab qiladigan o'yinlarda shu yerga yozasiz.",
+  privateUnknown: "Sizni hali o'quv guruhida topa olmadim. Guruhdagi tugmani bosing.",
+  noOpenQuestion: "Hozir javob kutilayotgan savol yo'q.",
+  tooLong: "Javob juda uzun. Qisqaroq yuboring.",
+  findMistakeAsk: "Kodni tuzating va to'liq tuzatilgan kodni bitta xabarda yuboring.",
+  guessAsk: "So'zni yozib yuboring. Har bir maslahatda bitta urinish bor.",
+  confirmDraft: "Shu javobni yuborasizmi? Yuborilgandan keyin o'zgartirib bo'lmaydi.",
+  confirmSend: "✅ Yuborish",
+  confirmEdit: "✏️ O'zgartirish",
+  sendNewDraft: "Yangi variantni yuboring.",
+  answerButton: "✍️ Javob berish",
+  setupButton: "🤖 Botni ishga tushirish",
+  setupPrompt: "Bugungi o'yinda javoblar bot bilan shaxsiy chatda yoziladi. Hali boshlamagan bo'lsangiz, tugmani bosing.",
+  trueLabel: "To'g'ri",
+  falseLabel: "Noto'g'ri",
+  questionOf: "Savol {n}/{total}",
+  clue: "{n}-maslahat",
+  timeLimit: "⏱ {min} daqiqa",
+  closedAnswer: "⏱ Vaqt tugadi! To'g'ri javob: {answer}",
+  explanation: "💡 {text}",
+  correctFix: "✅ To'g'ri yechim:",
+  gameNames: {
+    quiz_poll: "Viktorina",
+    find_mistake: "Xatoni top",
+    guess_word: "So'zni top",
+    true_false: "To'g'ri yoki noto'g'ri",
+    picture_quiz: "Rasmli savol",
+    emoji_puzzle: "Emoji topishmoq",
+  } satisfies Record<GameType, string>,
+  gameIcons: {
+    quiz_poll: "❓",
+    find_mistake: "🐞",
+    guess_word: "🔤",
+    true_false: "⚖️",
+    picture_quiz: "🖼",
+    emoji_puzzle: "😀",
+  } satisfies Record<GameType, string>,
+  dailyTitle: "📊 Bugungi natijalar — {date}",
+  weeklyTitle: "🏆 Haftalik natijalar — {from}–{to}",
+  topic: "Mavzu: {topic}",
+  game: "O'yin: {game}",
+  points: "{n} ball",
+  correct: "{n} to'g'ri",
+  wrong: "{n} xato",
+  unanswered: "{n} javobsiz",
+  pending: "{n} tekshirilmoqda",
+  bonus: "🔥 Seriya bonusi",
+  pendingNote: "⏳ Ba'zi javoblar hali tekshirilmoqda — natijalar yangilanadi.",
+  provisionalNote: "⏳ Natijalar dastlabki: tekshiruv tugagach g'olib e'lon qilinadi.",
+  champion: "🥇 Hafta chempioni: {names}",
+  champions: "🥇 Hafta chempionlari: {names}",
+  noChampion: "Bu hafta g'olib yo'q.",
+  inactiveTitle: "Nofaol (avval qatnashgan):",
+  part: "({n}/{total})",
+  noGamesToday: "Bugun o'yin bo'lmadi.",
+  canceledNote: "Bugungi o'yinlar to'xtatildi.",
+  corrected: "✏️ Yangilandi",
+};
+
+type Dict = typeof uz;
+
+const ru: Dict = {
+  ...uz,
+  answerAccepted: "Ответ принят ✅",
+  alreadyAnswered: "Вы уже ответили на этот вопрос.",
+  tooLate: "Время вышло ⌛ Ответ не принят.",
+  notEligible: "Сейчас вы не можете участвовать в игре.",
+  buttonExpired: "Эта кнопка больше не работает.",
+  stageAlreadyAnswered: "На этом этапе вы уже ответили. Ждите следующую подсказку.",
+  privateReady: "Готово ✅ В играх с письменным ответом пишите сюда.",
+  privateUnknown: "Я пока не нашёл вас в учебной группе. Нажмите кнопку в группе.",
+  noOpenQuestion: "Сейчас нет открытого вопроса.",
+  tooLong: "Ответ слишком длинный. Отправьте короче.",
+  findMistakeAsk: "Исправьте код и отправьте весь исправленный код одним сообщением.",
+  guessAsk: "Напишите слово. На каждой подсказке — одна попытка.",
+  confirmDraft: "Отправить этот ответ? Изменить его потом нельзя.",
+  confirmSend: "✅ Отправить",
+  confirmEdit: "✏️ Изменить",
+  sendNewDraft: "Отправьте новый вариант.",
+  answerButton: "✍️ Ответить",
+  setupButton: "🤖 Запустить бота",
+  setupPrompt: "Сегодня ответы пишутся в личном чате с ботом. Если ещё не начинали — нажмите кнопку.",
+  trueLabel: "Верно",
+  falseLabel: "Неверно",
+  questionOf: "Вопрос {n}/{total}",
+  clue: "Подсказка {n}",
+  timeLimit: "⏱ {min} мин",
+  closedAnswer: "⏱ Время вышло! Правильный ответ: {answer}",
+  correctFix: "✅ Правильное решение:",
+  gameNames: {
+    quiz_poll: "Викторина",
+    find_mistake: "Найди ошибку",
+    guess_word: "Угадай слово",
+    true_false: "Верно или неверно",
+    picture_quiz: "Вопрос с картинкой",
+    emoji_puzzle: "Эмодзи-загадка",
+  },
+  dailyTitle: "📊 Итоги дня — {date}",
+  weeklyTitle: "🏆 Итоги недели — {from}–{to}",
+  topic: "Тема: {topic}",
+  game: "Игра: {game}",
+  points: "{n} балл.",
+  correct: "{n} верно",
+  wrong: "{n} ошиб.",
+  unanswered: "{n} без ответа",
+  pending: "{n} на проверке",
+  bonus: "🔥 Бонус за серию",
+  pendingNote: "⏳ Некоторые ответы ещё проверяются — итоги обновятся.",
+  provisionalNote: "⏳ Итоги предварительные: победитель будет объявлен после проверки.",
+  champion: "🥇 Чемпион недели: {names}",
+  champions: "🥇 Чемпионы недели: {names}",
+  noChampion: "На этой неделе победителя нет.",
+  inactiveTitle: "Неактивные (участвовали раньше):",
+  noGamesToday: "Сегодня игр не было.",
+  canceledNote: "Игры сегодня остановлены.",
+  corrected: "✏️ Обновлено",
+};
+
+const en: Dict = {
+  ...uz,
+  answerAccepted: "Answer received ✅",
+  alreadyAnswered: "You have already answered this question.",
+  tooLate: "Time is up ⌛ Answer not accepted.",
+  notEligible: "You can't take part in this game right now.",
+  buttonExpired: "This button no longer works.",
+  stageAlreadyAnswered: "You already answered at this clue. Wait for the next clue.",
+  privateReady: "Ready ✅ For written-answer games, type your answers here.",
+  privateUnknown: "I haven't found you in a class group yet. Tap the button in the group.",
+  noOpenQuestion: "There is no open question right now.",
+  tooLong: "That answer is too long. Please send a shorter one.",
+  findMistakeAsk: "Fix the code and send the whole fixed code in one message.",
+  guessAsk: "Type the word. You get one try per clue.",
+  confirmDraft: "Send this answer? You can't change it afterwards.",
+  confirmSend: "✅ Send",
+  confirmEdit: "✏️ Change",
+  sendNewDraft: "Send your new version.",
+  answerButton: "✍️ Answer",
+  setupButton: "🤖 Start the bot",
+  setupPrompt: "Today's answers are written in a private chat with the bot. If you haven't started it yet, tap the button.",
+  trueLabel: "True",
+  falseLabel: "False",
+  questionOf: "Question {n}/{total}",
+  clue: "Clue {n}",
+  timeLimit: "⏱ {min} min",
+  closedAnswer: "⏱ Time's up! Correct answer: {answer}",
+  correctFix: "✅ Correct solution:",
+  gameNames: {
+    quiz_poll: "Quiz",
+    find_mistake: "Find the mistake",
+    guess_word: "Guess the word",
+    true_false: "True or false",
+    picture_quiz: "Picture quiz",
+    emoji_puzzle: "Emoji puzzle",
+  },
+  dailyTitle: "📊 Today's results — {date}",
+  weeklyTitle: "🏆 Weekly results — {from}–{to}",
+  topic: "Topic: {topic}",
+  game: "Game: {game}",
+  points: "{n} pts",
+  correct: "{n} correct",
+  wrong: "{n} wrong",
+  unanswered: "{n} unanswered",
+  pending: "{n} pending",
+  bonus: "🔥 Streak bonus",
+  pendingNote: "⏳ Some answers are still being checked — results will be updated.",
+  provisionalNote: "⏳ Provisional standings: the champion is named once checks finish.",
+  champion: "🥇 Champion of the week: {names}",
+  champions: "🥇 Champions of the week: {names}",
+  noChampion: "No champion this week.",
+  inactiveTitle: "Inactive (took part earlier):",
+  noGamesToday: "No games today.",
+  canceledNote: "Today's games were stopped.",
+  corrected: "✏️ Updated",
+};
+
+const DICTS: Record<Lang, Dict> = { uz, ru, en };
+
+export type StringKey = { [K in keyof Dict]: Dict[K] extends string ? K : never }[keyof Dict];
+
+export function t(lang: Lang, key: StringKey, params: Record<string, string | number> = {}): string {
+  const template = (DICTS[lang] ?? uz)[key] as string;
+  return template.replace(/\{(\w+)\}/g, (_, k: string) => (k in params ? String(params[k]) : `{${k}}`));
+}
+
+export function gameName(lang: Lang, g: GameType): string {
+  return (DICTS[lang] ?? uz).gameNames[g];
+}
+
+export function gameIcon(g: GameType): string {
+  return uz.gameIcons[g];
+}
+
+export function tfLabels(lang: Lang): [string, string] {
+  return [t(lang, "trueLabel"), t(lang, "falseLabel")];
+}

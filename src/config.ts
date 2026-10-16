@@ -107,6 +107,8 @@ type ModelKey = "AI_GENERATION_MODEL" | "AI_REVIEW_MODEL" | "AI_GRADING_MODEL" |
 
 export interface AppConfig extends Omit<Env, ModelKey | "HTTP_PORT"> {
   isProduction: boolean;
+  /** Non-fatal configuration notes, logged at startup. */
+  warnings: string[];
   HTTP_PORT: number;
   AI_GENERATION_MODEL: string;
   AI_REVIEW_MODEL: string;
@@ -142,7 +144,17 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     // Railway: the generated/custom public domain is the webhook host unless WEBHOOK_URL is given explicitly.
     WEBHOOK_URL: env.WEBHOOK_URL ?? (env.RAILWAY_PUBLIC_DOMAIN ? `https://${env.RAILWAY_PUBLIC_DOMAIN}` : undefined),
     isProduction: env.APP_MODE === "production",
+    warnings: [],
   };
+  // A webhook needs a public HTTPS URL and a secret. Without them, keep the bot working with long polling
+  // (exactly one mode is ever active) and say clearly how to enable the webhook.
+  if (cfg.TELEGRAM_MODE === "webhook" && (!cfg.WEBHOOK_URL || !cfg.WEBHOOK_SECRET)) {
+    const missing = !cfg.WEBHOOK_URL
+      ? "no WEBHOOK_URL / public domain (on Railway: bot service -> Settings -> Networking -> Generate Domain)"
+      : "no WEBHOOK_SECRET";
+    cfg.warnings.push(`TELEGRAM_MODE=webhook but ${missing}: using long polling until it is configured`);
+    cfg.TELEGRAM_MODE = "polling";
+  }
   assertConfigConsistency(cfg);
   return cfg;
 }
@@ -170,10 +182,6 @@ export function assertConfigConsistency(cfg: AppConfig): void {
   }
   if (cfg.DATABASE_DIRECT_URL && /-pooler\./.test(cfg.DATABASE_DIRECT_URL)) {
     problems.push("DATABASE_DIRECT_URL must be the direct Neon endpoint (host without '-pooler')");
-  }
-  if (cfg.TELEGRAM_MODE === "webhook") {
-    if (!cfg.WEBHOOK_URL) problems.push("WEBHOOK_URL is required when TELEGRAM_MODE=webhook (on Railway: generate a public domain for the service)");
-    if (!cfg.WEBHOOK_SECRET) problems.push("WEBHOOK_SECRET is required when TELEGRAM_MODE=webhook");
   }
   if (problems.length) throw new Error(`Invalid configuration:\n${problems.join("\n")}`);
 }

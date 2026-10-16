@@ -17,9 +17,11 @@ const cfg = loadConfig();
 const app = await buildApp(cfg);
 const { ctx, database, boss, pollingApi } = app;
 const log = ctx.log;
+for (const w of cfg.warnings) log.warn(w);
 if (cfg.RAILWAY_ENVIRONMENT && cfg.TELEGRAM_MODE === "polling") {
-  // During a Railway deploy old and new instances overlap; two long-polling consumers get 409 Conflict.
-  log.warn("Running on Railway with TELEGRAM_MODE=polling - use TELEGRAM_MODE=webhook (WEBHOOK_URL defaults to the Railway domain)");
+  // During a Railway deploy old and new instances overlap; two long-polling consumers get 409 Conflict for a few
+  // seconds (the poll loop backs off and recovers). Webhook mode avoids it.
+  log.warn("Running on Railway in polling mode - generate a public domain and set WEBHOOK_SECRET to use the webhook");
 }
 
 await migrateUrl(directDatabaseUrl(cfg), (m) => log.info(m));

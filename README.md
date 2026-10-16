@@ -107,6 +107,8 @@ railway config apply           # creates the project, Postgres and the bot servi
 2. **Public domain** — `bot` → *Settings → Networking → Generate Domain* (or `railway domain`). Railway then injects
    `RAILWAY_PUBLIC_DOMAIN`; the bot uses `https://<that domain>/telegram/webhook` and registers the webhook itself.
    The app listens on Railway's `PORT` automatically.
+   Until a domain and `WEBHOOK_SECRET` exist the bot does not crash: it runs in long-polling mode and logs a warning
+   saying what is missing; after you generate the domain, redeploy and it switches to the webhook.
 3. **Deploy the code** — either connect GitHub (push this folder to a private repo, then run
    `GITHUB_REPO=you/repo railway config apply` once; every push to `main` deploys), or deploy this folder directly:
    `railway up --service bot`. `.env`, `.data`, `node_modules` are not uploaded (`.gitignore` / `.dockerignore`).

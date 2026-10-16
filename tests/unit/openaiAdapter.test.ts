@@ -110,7 +110,16 @@ describe("configuration", () => {
     expect(c.WEBHOOK_URL).toBe("https://student-bot-production.up.railway.app");
     expect(loadConfig(base as NodeJS.ProcessEnv).HTTP_PORT).toBe(8080);
     expect(loadConfig({ ...base, PORT: "7123", HTTP_PORT: "9000" } as NodeJS.ProcessEnv).HTTP_PORT).toBe(9000);
-    expect(() => loadConfig({ ...base, TELEGRAM_MODE: "webhook", WEBHOOK_SECRET: "s".repeat(32) } as NodeJS.ProcessEnv)).toThrow(/generate a public domain/);
+    // Webhook requested but no domain yet (e.g. Railway before "Generate Domain"): keep working with polling.
+    const noDomain = loadConfig({ ...base, TELEGRAM_MODE: "webhook", WEBHOOK_SECRET: "s".repeat(32) } as NodeJS.ProcessEnv);
+    expect(noDomain.TELEGRAM_MODE).toBe("polling");
+    expect(noDomain.warnings.join()).toMatch(/Generate Domain/);
+    const noSecret = loadConfig({ ...base, TELEGRAM_MODE: "webhook", RAILWAY_PUBLIC_DOMAIN: "x.up.railway.app" } as NodeJS.ProcessEnv);
+    expect(noSecret.TELEGRAM_MODE).toBe("polling");
+    expect(noSecret.warnings.join()).toMatch(/WEBHOOK_SECRET/);
+    const ready = loadConfig({ ...base, TELEGRAM_MODE: "webhook", RAILWAY_PUBLIC_DOMAIN: "x.up.railway.app", WEBHOOK_SECRET: "s".repeat(32) } as NodeJS.ProcessEnv);
+    expect(ready.TELEGRAM_MODE).toBe("webhook");
+    expect(ready.warnings).toEqual([]);
   });
 
   it("connects to Railway Postgres: plain private URL inside Railway, encrypted (self-signed) via the public proxy", () => {
